@@ -71,7 +71,7 @@ docker-compose -f databases/postgres_16_3.yml -p databses up -d
 > - POSTGRES_USER
 > - POSTGRES_PASSWORD
 
-# Databases managers
+# Database managers
 
 ##  Adminer 
 
