@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:      
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql
+    restart: always   
+    environment:
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Express #A free entry-level database, small server data-driven applications of up to 10 GB.
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql      
+    networks:
+      - nat
+      
+volumes:
+  mssql_data:
+
+networks:
+  nat:
+    external: true
+    name: nat

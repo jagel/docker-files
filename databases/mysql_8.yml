@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  mysqldb:
+    image: mysql:8.0 #latest version 
+    container_name: mysql_8 
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      #if you want to craete a database/user and password use the following lines, otherwise you can discard the following lines
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      # --- end how to create a database after creating a container? See README
+    ports:
+        - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - nat
+
+volumes:
+  mysql_data:
+
+networks:
+  nat:
+    external: true
+    name: nat
