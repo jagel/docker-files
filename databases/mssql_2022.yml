@@ -1,0 +1,34 @@
+version: '3.9' # Specify the Docker Compose file format version
+
+services:
+  mssql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest # Use the official SQL Server 2022 image
+    container_name: mssql2022 # A descriptive name for your container
+    hostname: mssql2022 # Hostname for the container within the Docker network
+    environment:
+      ACCEPT_EULA: 'Y' # Required to accept the End-User License Agreement
+      SA_PASSWORD: ${MSSQL22_SA_PASSWORD}
+      MSSQL_PID: 'Express' # Specify the SQL Server edition (e.g., Developer, Express, Standard)
+      # MSSQL_DATA_DIR: '/var/opt/mssql/data' # Optional: Customize data directory
+      # MSSQL_LOG_DIR: '/var/opt/mssql/log' # Optional: Customize log directory
+    ports:
+      - "1433:1433" # Map host port 1433 to container port 1433
+    volumes:
+      - ./data/mssql2022:/var/opt/mssql/data # Persist data in a local directory
+      # - ./logs/mssql2022:/var/opt/mssql/log # Optional: Persist logs
+    restart: unless-stopped # Automatically restart the container unless explicitly stopped
+    healthcheck: # Optional: Define a health check for the SQL Server instance
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrongPassword!", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mssql_data: # Define the named volume for data persistence
+  # mssql_log: # Optional: Define the named volume for logs
+
+networks:
+  nat:
+    external: true
+    name: nat
